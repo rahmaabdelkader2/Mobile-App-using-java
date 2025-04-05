@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">مرحبا بالنظم المدمجه</string>
+    <string name="mobile_number">رقم الهاتف</string>
+    <string name="message">الرساله</string>
+    <string name="next_btn">التالي</string>
+    <string name="exit_btn">خروج</string>
+    <string name="numbers">01099045774</string>
+    <string name="msg">hello</string>
+    <string name="back_btn">رجوع</string>
+</resources>
