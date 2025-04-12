@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8CC8F8"
+    tools:context=".Dynamic_Fragment">
+
+    <TextView
+        android:id="@+id/dynamictxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/DynamicFragTxt"
+        android:textColor="#17277B"
+        android:textColorLink="#C44141"
+        android:textSize="24sp" />
+</FrameLayout>
