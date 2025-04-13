@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Lab2_2</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="message">Message</string>
+    <string name="next_btn">Next</string>
+    <string name="exit_btn">Exit</string>
+    <string name="numbers">01099045774</string>
+    <string name="msg">hello</string>
+    <string name="back_btn">Back</string>
+    <string name="W_SH">W_SH</string>
+    <string name="R_SH">R_SH</string>
+    <string name="n_a">N/A</string>
+    <string name="W_IS">W_IS</string>
+    <string name="R_IS">R_IS</string>
+    <string name="W_DB">W_DB</string>
+    <string name="R_DB">R_DB</string>
+
+</resources>
