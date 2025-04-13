@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DownloadImage</string>
+    <string name="Download">Download</string>
+    <string name="editURL">https://miro.medium.com/v2/resize:fit:6018/1*3rewUBdM1VKZrBGd7UDoFA.png</string>
+</resources>

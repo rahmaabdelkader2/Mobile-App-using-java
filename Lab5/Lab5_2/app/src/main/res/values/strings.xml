@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lab5_2</string>
+    <string name="Rating">Rating</string>
+    <string name="Description">Description</string>
+    <string name="Price">Price</string>
+    <string name="Tittle">Tittle</string>
+</resources>
