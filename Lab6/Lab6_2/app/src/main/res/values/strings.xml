@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Lab6_2</string>
+    <string name="titleTxt">Title</string>
+    <string name="priceTxt">Price</string>
+    <string name="descriptiontxt">Description</string>
+    <string name="ratingtxt">Rating</string>
+    <string name="titlejs">titlejs</string>
+    <string name="pricejs">pricejs</string>
+    <string name="description">description</string>
+</resources>
