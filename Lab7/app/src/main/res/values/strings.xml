@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Lab7</string>
+    <string name="titlejs">title from json</string>
+    <string name="pricejs">price from js</string>
+    <string name="ratingtxt">Rating</string>
+    <string name="titletxt">Title</string>
+    <string name="pricetxt">Price</string>
+    <string name="descriptiontxt">Description</string>
+    <string name="description">description parsed from json</string>
+</resources>

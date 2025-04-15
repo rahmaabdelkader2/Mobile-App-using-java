@@ -1,7 +1,6 @@
 package com.example.lab3_1;
 
 import android.os.Bundle;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -18,7 +17,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onCounterUpdated(int count) {
-        // Find the second fragment
         Fragment fragment2 = getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView2);
 
