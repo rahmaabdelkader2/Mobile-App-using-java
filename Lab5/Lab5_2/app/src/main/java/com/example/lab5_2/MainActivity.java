@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +22,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView arrowLeft, arrowRight, productImage;
     private List<ItemInfo> itemList = new ArrayList<>();
     private int currentItemIndex = 0;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         arrowRight = findViewById(R.id.imageView3);
         productImage = findViewById(R.id.imageView);
 
-        // Fetch data from API
-        new FetchItemsTask().execute("https://dummyjson.com/products");
+        // Fetch data from API using Handler approach
+        fetchItemsWithHandler("https://dummyjson.com/products");
 
         // Set up click listeners for navigation arrows
         arrowLeft.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +74,52 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void fetchItemsWithHandler(String url) {
+        executorService.execute(() -> {
+            // Background work: fetch JSON data
+            HttpHandler handler = new HttpHandler();
+            final String jsonStr = handler.makeServiceCall(url);
+
+            mainHandler.post(() -> {
+                // UI thread work: process JSON and update UI
+                if (jsonStr != null) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(jsonStr);
+                        JSONArray jsonArray = jsonObject.getJSONArray("products");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject product = jsonArray.getJSONObject(i);
+                            ItemInfo item = new ItemInfo();
+                            item.setId(product.getString("id"));
+                            item.setTitle(product.getString("title"));
+                            item.setPrice(product.getString("price"));
+                            item.setDescription(product.getString("description"));
+                            item.setRating(product.getString("rating"));
+
+                            // Get the first image URL
+                            JSONArray images = product.getJSONArray("images");
+                            if (images.length() > 0) {
+                                item.setImageUrl(images.getString(0));
+                            }
+
+                            itemList.add(item);
+                        }
+
+                        // Display the first item
+                        if (!itemList.isEmpty()) {
+                            displayCurrentItem();
+                        }
+
+                    } catch (JSONException e) {
+                        Log.e("MainActivity", "Error parsing JSON: " + e.getMessage());
+                    }
+                } else {
+                    Log.e("MainActivity", "Couldn't get JSON from server.");
+                }
+            });
+        });
+    }
+
     private void displayCurrentItem() {
         if (itemList.isEmpty() || currentItemIndex < 0 || currentItemIndex >= itemList.size()) {
             return;
@@ -86,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("MainActivity", "Error parsing rating: " + e.getMessage());
         }
 
-        // Load product image using AsyncTask
+        // Load product image using AsyncTask (keeping this as AsyncTask for now)
         if (currentItem.getImageUrl() != null && !currentItem.getImageUrl().isEmpty()) {
             new LoadImageTask().execute(currentItem.getImageUrl());
         } else {
@@ -118,53 +170,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class FetchItemsTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            HttpHandler handler = new HttpHandler();
-            return handler.makeServiceCall(strings[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (s != null) {
-                try {
-                    JSONObject jsonObject = new JSONObject(s);
-                    JSONArray jsonArray = jsonObject.getJSONArray("products");
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject product = jsonArray.getJSONObject(i);
-                        ItemInfo item = new ItemInfo();
-                        item.setId(product.getString("id"));
-                        item.setTitle(product.getString("title"));
-                        item.setPrice(product.getString("price"));
-                        item.setDescription(product.getString("description"));
-
-                        // Get rating from the product object
-                        item.setRating(product.getString("rating"));
-
-                        // Get the first image URL
-                        JSONArray images = product.getJSONArray("images");
-                        if (images.length() > 0) {
-                            item.setImageUrl(images.getString(0));
-                        }
-
-                        itemList.add(item);
-                    }
-
-                    // Display the first item
-                    if (!itemList.isEmpty()) {
-                        displayCurrentItem();
-                    }
-
-                } catch (JSONException e) {
-                    Log.e("MainActivity", "Error parsing JSON: " + e.getMessage());
-                }
-            } else {
-                Log.e("MainActivity", "Couldn't get JSON from server.");
-            }
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executorService.shutdown();
     }
 }
